@@ -1,4 +1,4 @@
-# Dev KB
+# Dev Knowledge Base
 
 > Knowledge base trung tâm cho developer & AI agent. Đọc file này TRƯỚC để biết
 > có gì, ở đâu — rồi chỉ fetch đúng file cần. Đừng nạp toàn bộ KB vào context.

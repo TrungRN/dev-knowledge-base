@@ -1,6 +1,6 @@
 # registry.yaml — Danh bạ các project anh em
 # Agent tra file này để biết project khác có gì & ở đâu, KHÔNG load cả project.
-# Schema thiết kế MCP-ready: giai đoạn 2 có thể bọc dev-kb thành MCP server
+# Schema thiết kế MCP-ready: giai đoạn 2 có thể bọc dev-knowledge-base thành MCP server
 # đọc đúng file này và serve thành tool, không đổi data model.
 
 version: 1
@@ -10,7 +10,7 @@ updated: 2026-06-14
 projects:
   - id: example-legacy-api          # định danh ngắn, duy nhất
     name: "Legacy Payment API"       # tên người-đọc
-    path: "../example-legacy-api"    # đường dẫn tương đối từ dev-kb (cùng cấp)
+    path: "../example-legacy-api"    # đường dẫn tương đối từ dev-knowledge-base (cùng cấp)
     status: active                   # active | maintenance | archived
     stack:                           # do auto-scan điền
       languages: [java]

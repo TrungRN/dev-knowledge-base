@@ -2,8 +2,8 @@
 
 ## Symlink `.kb` hỏng / trỏ sai
 - Triệu chứng: agent không đọc được `@.kb/...`, hoặc `ls .kb` báo lỗi.
-- Khắc phục: xoá và tạo lại — `rm .kb && ./<đường-dẫn>/dev-kb/scripts/connect-project.sh .` (từ trong project), hoặc `ln -s <đường-dẫn-dev-kb> .kb`.
-- Nguyên nhân hay gặp: đổi chỗ thư mục project hoặc dev-kb → đường dẫn tương đối lệch. Giữ chúng ngang hàng.
+- Khắc phục: xoá và tạo lại — `rm .kb && ./<đường-dẫn>/dev-knowledge-base/scripts/connect-project.sh .` (từ trong project), hoặc `ln -s <đường-dẫn-dev-knowledge-base> .kb`.
+- Nguyên nhân hay gặp: đổi chỗ thư mục project hoặc dev-knowledge-base → đường dẫn tương đối lệch. Giữ chúng ngang hàng.
 
 ## Agent nạp quá nhiều / tốn token
 - Kiểm tra agent có đọc `repo-map.md`/`llms.txt` trước không. Nhắc rõ trong prompt: "đọc index trước, fetch theo nhu cầu".

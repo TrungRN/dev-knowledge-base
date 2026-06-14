@@ -1,6 +1,6 @@
 <svg viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Segoe UI', Roboto, sans-serif">
-  <title>Dev KB — cấu trúc và vòng đời sử dụng</title>
-  <desc>Phần trên: dev-kb là tri thức chung, mỗi project nối vào qua symlink .kb và có tri thức riêng .kb-local, các project biết nhau qua registry.yaml. Phần dưới: vòng đời gồm Tích hợp và Auto-scan (một lần), rồi Làm việc và PR check drift lặp lại mỗi PR.</desc>
+  <title>Dev Knowledge Base — cấu trúc và vòng đời sử dụng</title>
+  <desc>Phần trên: dev-knowledge-base là tri thức chung, mỗi project nối vào qua symlink .kb và có tri thức riêng .kb-local, các project biết nhau qua registry.yaml. Phần dưới: vòng đời gồm Tích hợp và Auto-scan (một lần), rồi Làm việc và PR check drift lặp lại mỗi PR.</desc>
   <style>
     .ttl{fill:#1d1d1b;font-weight:700}
     .lbl{fill:#1d1d1b;font-weight:600}
@@ -19,12 +19,12 @@
   </defs>
   <rect x="0" y="0" width="900" height="640" fill="#ffffff"/>
 
-  <text x="450" y="34" text-anchor="middle" font-size="21" class="ttl">Dev KB — Cấu trúc &amp; Vòng đời sử dụng</text>
+  <text x="450" y="34" text-anchor="middle" font-size="21" class="ttl">Dev Knowledge Base — Cấu trúc &amp; Vòng đời sử dụng</text>
 
   <text x="40" y="74" font-size="12" class="sec">1 · CẤU TRÚC</text>
 
   <rect x="350" y="86" width="200" height="80" rx="10" class="box"/>
-  <text x="450" y="120" text-anchor="middle" font-size="16" class="lbl">dev-kb</text>
+  <text x="450" y="120" text-anchor="middle" font-size="16" class="lbl">dev-knowledge-base</text>
   <text x="450" y="141" text-anchor="middle" font-size="12" class="sub">tri thức CHUNG</text>
   <text x="450" y="157" text-anchor="middle" font-size="10.5" class="sub">standards · templates · prompts</text>
 

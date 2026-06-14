@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Nối một project vào KB: tạo symlink .kb -> dev-kb và thư mục .kb-local/
+# Nối một project vào KB: tạo symlink .kb -> dev-knowledge-base và thư mục .kb-local/
 #
 # Khuyến nghị: chạy TỪ TRONG project con (không cần tham số):
-#   ../dev-kb/scripts/connect-project.sh
+#   ../dev-knowledge-base/scripts/connect-project.sh
 # Hoặc chạy từ bất cứ đâu và truyền đường dẫn project:
-#   /đường-dẫn/dev-kb/scripts/connect-project.sh ../project-a
+#   /đường-dẫn/dev-knowledge-base/scripts/connect-project.sh ../project-a
 # Chạy từ đâu cũng cho kết quả như nhau (script tự xác định vị trí KB).
 set -euo pipefail
 
-# Thư mục gốc của dev-kb (nơi script này nằm, lùi 1 cấp) — độc lập với chỗ gọi lệnh.
+# Thư mục gốc của dev-knowledge-base (nơi script này nằm, lùi 1 cấp) — độc lập với chỗ gọi lệnh.
 KB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Mặc định: thư mục hiện tại (tiện khi đứng trong project con). Hoặc nhận tham số.
@@ -16,7 +16,7 @@ TARGET="${1:-$PWD}"
 PROJECT_DIR="$(cd "$TARGET" && pwd)" || { echo "Không tìm thấy project: $TARGET" >&2; exit 1; }
 
 if [[ "$PROJECT_DIR" == "$KB_DIR" ]]; then
-  echo "Lỗi: đang trỏ vào chính dev-kb — không thể nối KB vào chính nó." >&2
+  echo "Lỗi: đang trỏ vào chính dev-knowledge-base — không thể nối KB vào chính nó." >&2
   echo "Hãy chạy lệnh TỪ TRONG project con, hoặc truyền đường dẫn project làm tham số." >&2
   exit 1
 fi
@@ -24,7 +24,7 @@ fi
 echo "KB:      $KB_DIR"
 echo "Project: $PROJECT_DIR"
 
-# 1) Symlink .kb -> dev-kb (đường dẫn tương đối để di chuyển cùng nhau dễ hơn)
+# 1) Symlink .kb -> dev-knowledge-base (đường dẫn tương đối để di chuyển cùng nhau dễ hơn)
 REL="$(python3 -c "import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))" "$KB_DIR" "$PROJECT_DIR")"
 if [[ -L "$PROJECT_DIR/.kb" || -e "$PROJECT_DIR/.kb" ]]; then
   echo "• .kb đã tồn tại — bỏ qua (xoá thủ công nếu muốn tạo lại)."
@@ -44,7 +44,7 @@ echo "• Tạo file trỏ đa tool:"
 # 3) Gợi ý .gitignore: bỏ symlink .kb (trỏ ra ngoài, phụ thuộc máy)
 GI="$PROJECT_DIR/.gitignore"
 if ! { [[ -f "$GI" ]] && grep -qxF ".kb" "$GI"; }; then
-  printf "\n# Symlink tới dev-kb (tạo lại bằng connect-project.sh)\n.kb\n" >> "$GI"
+  printf "\n# Symlink tới dev-knowledge-base (tạo lại bằng connect-project.sh)\n.kb\n" >> "$GI"
   echo "• Thêm '.kb' vào .gitignore"
 fi
 

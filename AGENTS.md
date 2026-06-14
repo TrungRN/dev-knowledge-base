@@ -1,4 +1,4 @@
-# AGENTS.md — Dev KB (trung tâm)
+# AGENTS.md — Dev Knowledge Base (trung tâm)
 
 File entry chuẩn cho mọi AI agent (Claude Code, Cursor, Copilot, Codex...).
 Đây là KB **trung tâm**; mỗi project con có AGENTS.md riêng trỏ về đây qua `@.kb/...`.
@@ -39,7 +39,7 @@ Không cần người nhắc — tự thực hiện theo thứ tự:
 project-legacy/
 ├── AGENTS.md          # NGUỒN SỰ THẬT: @import .kb/standards/*, phần riêng project
 ├── CLAUDE.md          # file trỏ: chỉ chứa "@AGENTS.md" (để Claude Code nhận)
-├── .kb -> ../dev-kb   # symlink tới KB trung tâm (một bản vật lý)
+├── .kb -> ../dev-knowledge-base   # symlink tới KB trung tâm (một bản vật lý)
 └── .kb-local/         # knowledge RIÊNG của project: repo-map.md, llms.txt, adr/
 ```
 
