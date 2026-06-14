@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# pre-push hook — KB drift check (cảnh báo sớm trên máy dev, KHÔNG chặn push).
+# Cài bằng: .kb/scripts/install-hooks.sh   (copy file này vào .git/hooks/pre-push)
+#
+# Muốn CHẶN push khi có drift: đổi dòng cuối thành:
+#     exec bash "$CHECK" "origin/main" --strict
+CHECK="$(git rev-parse --show-toplevel)/.kb-local/ci/kb-drift-check.sh"
+if [ -x "$CHECK" ]; then
+  bash "$CHECK" "origin/main"
+fi
+exit 0   # advisory: luôn cho push. (Dùng --strict ở trên để chặn.)

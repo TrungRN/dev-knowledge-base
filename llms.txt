@@ -1,0 +1,40 @@
+# Dev KB
+
+> Knowledge base trung tâm cho developer & AI agent. Đọc file này TRƯỚC để biết
+> có gì, ở đâu — rồi chỉ fetch đúng file cần. Đừng nạp toàn bộ KB vào context.
+
+## Bắt đầu ở đây
+- [AGENTS.md](AGENTS.md): Convention chung + luật làm việc cho agent. Đọc đầu tiên. (Claude Code: nạp qua CLAUDE.md → `@AGENTS.md`.)
+- [README.md](README.md): Tổng quan kiến trúc & triết lý KB (cho người).
+- [registry.yaml](registry.yaml): Danh bạ project anh em — tra ở đây để biết project khác có gì, đường dẫn ở đâu.
+
+## Standards (convention dùng chung)
+- [standards/git-flow.md](standards/git-flow.md): Quy ước nhánh, commit, PR.
+- [standards/code-style.md](standards/code-style.md): Quy ước style (phần chung; phần riêng theo stack nằm ở `.kb` của project).
+- [standards/code-review.md](standards/code-review.md): Checklist review.
+- [standards/security.md](standards/security.md): Luật bảo mật, secrets, gotchas.
+- [standards/naming.md](standards/naming.md): Quy ước đặt tên.
+- [standards/indexing.md](standards/indexing.md): Chuẩn đánh index (llms.txt + repo map) để tiết kiệm token.
+- [standards/tool-compatibility.md](standards/tool-compatibility.md): Một nguồn AGENTS.md + file trỏ cho Claude Code (CLAUDE.md), Copilot, Gemini...
+
+## Decisions (ADR — tri thức được giữ lại)
+- [decisions/README.md](decisions/README.md): ADR là gì, khi nào viết.
+- [decisions/0001-record-architecture-decisions.md](decisions/0001-record-architecture-decisions.md): Quyết định dùng ADR.
+
+## Templates (agent dùng để sinh knowledge cho project con)
+- [templates/project-AGENTS.md](templates/project-AGENTS.md): Khung AGENTS.md cho 1 project.
+- [templates/project-llms.txt](templates/project-llms.txt): Khung llms.txt cho 1 project.
+- [templates/repo-map.md](templates/repo-map.md): Khung mục lục codebase.
+- [templates/adr.md](templates/adr.md): Khung một ADR.
+- [templates/kb-acceptance-checklist.md](templates/kb-acceptance-checklist.md): "Điều kiện cần thoả" khi cập nhật knowledge.
+
+## Playbooks (quy trình)
+- [playbooks/dev-workflow.md](playbooks/dev-workflow.md): Quy trình end-to-end của một dev (nhánh → code → drift check → PR → merge).
+- [playbooks/onboarding.md](playbooks/onboarding.md): Onboard dev mới vào project legacy.
+- [playbooks/connect-project.md](playbooks/connect-project.md): Nối 1 project mới vào KB.
+- [playbooks/automate-drift-check.md](playbooks/automate-drift-check.md): Tự động hoá drift check bằng pre-push hook + CI (GitLab/GitHub).
+- [playbooks/troubleshooting.md](playbooks/troubleshooting.md): Sự cố thường gặp.
+
+## Prompts (vận hành agent)
+- [prompts/auto-scan.md](prompts/auto-scan.md): Quét project legacy, detect stack, sinh AGENTS.md + llms.txt + repo map.
+- [prompts/review-kb-drift.md](prompts/review-kb-drift.md): Check lệch knowledge vs code theo PR.

@@ -1,0 +1,19 @@
+# <TÊN PROJECT>
+
+> Bản đồ tài liệu của project. Đọc trước, fetch đúng file cần. Không nạp cả project.
+
+## Bắt đầu
+- [AGENTS.md](../AGENTS.md): Luật làm việc + stack + lệnh.
+- [repo-map.md](repo-map.md): Mục lục codebase (module, entry, signature).
+
+## Knowledge riêng project
+- [code-style.md](code-style.md): Style cụ thể theo stack (auto-detected).
+- [glossary.md](glossary.md): Từ điển thuật ngữ domain & tên cũ khó hiểu.
+- [security-notes.md](security-notes.md): Gotcha bảo mật phát hiện trong code legacy.
+- [adr/](adr/): Quyết định kiến trúc của project.
+
+## Tham chiếu KB chung
+- [.kb/llms.txt](../../.kb/llms.txt): Bản đồ KB trung tâm.
+- [.kb/registry.yaml](../../.kb/registry.yaml): Project anh em.
+
+<auto-scan thêm các mục theo module/khu vực phát hiện được>

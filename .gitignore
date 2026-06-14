@@ -1,0 +1,15 @@
+# Dev KB — .gitignore
+# KB là một bản vật lý độc lập; hầu như mọi thứ đều commit. Chỉ bỏ rác hệ điều hành/editor.
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*~
+.idea/
+.vscode/
+
+# Lưu ý: KHÔNG ignore các file trỏ (.clinerules, .cursorrules, .windsurfrules,
+# GEMINI.md, CLAUDE.md, .github/copilot-instructions.md) — chúng cần commit.
