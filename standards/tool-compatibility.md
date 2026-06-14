@@ -1,45 +1,20 @@
-# Tương thích đa tool — một nguồn, đủ bộ file trỏ
+# Tương thích tool — hiện TẬP TRUNG Claude Code
 
-Mỗi AI coding tool tìm một tên file chỉ-dẫn khác nhau. Để **một** nội dung phục vụ
-mọi tool mà không lệch nhau: `AGENTS.md` là **nguồn sự thật duy nhất**; mọi tool khác
-dùng một **file trỏ** mỏng (import hoặc chỉ-dẫn) về `AGENTS.md`. Không copy nội dung.
+Giai đoạn này KB chỉ thiết lập cho **Claude Code** cho gọn. Mỗi project chỉ có một file
+agent: `CLAUDE.md` (do `link-kb.sh` tạo/giữ, trỏ `@.kb/AGENTS.md`). Nguồn luật chung vẫn
+là `AGENTS.md` ở KB.
 
-> Tài liệu ngoài kia mâu thuẫn về việc tool nào đã đọc AGENTS.md native. Cách an toàn
-> cho repo dùng chung: **cứ tạo đủ bộ file trỏ**. Tool đã đọc native → file trỏ vô hại;
-> tool chưa → file trỏ cứu. Script `scripts/add-tool-pointers.sh` tạo tất cả tự động.
+## Khi cần mở rộng sang tool khác (Cursor, Copilot, Gemini, Windsurf, Cline)
+Mỗi tool đọc một tên file khác nhau, tất cả chỉ cần **trỏ về cùng `@.kb/AGENTS.md`**
+(không copy nội dung). Khi đó thêm vào mỗi project:
 
-## Ma trận tool ↔ file
-
-| Tool | File nó đọc | Nội dung file trỏ |
+| Tool | File | Nội dung |
 |---|---|---|
-| Codex CLI | `AGENTS.md` | — (nguồn gốc) |
-| **Claude Code** | `CLAUDE.md` | `@AGENTS.md` (import) |
-| **Gemini CLI** | `GEMINI.md` | `@AGENTS.md` (import) |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | chỉ-dẫn "đọc AGENTS.md" |
-| **Cursor** | `AGENTS.md` native; `.cursorrules` (cũ) | chỉ-dẫn (fallback bản cũ) |
-| **Windsurf** | `AGENTS.md` native; `.windsurfrules` (cũ) | chỉ-dẫn |
-| **Cline** | `.clinerules` | chỉ-dẫn |
+| Claude Code | `CLAUDE.md` | `@.kb/AGENTS.md` (đã có) |
+| Codex / Cursor / Windsurf | `AGENTS.md` | `@.kb/AGENTS.md` |
+| Gemini CLI | `GEMINI.md` | `@.kb/AGENTS.md` |
+| GitHub Copilot | `.github/copilot-instructions.md` | "đọc .kb/AGENTS.md" |
+| Cline | `.clinerules` | "đọc .kb/AGENTS.md" |
 
-## Tạo đủ bộ (tự động)
-Chạy `scripts/connect-project.sh` khi nối project sẽ **tự tạo cả bộ**. Hoặc chạy riêng:
-```bash
-./scripts/add-tool-pointers.sh [đường-dẫn-project]   # mặc định: thư mục hiện tại
-```
-Script idempotent: file đã có thì bỏ qua, không ghi đè.
-
-## Nguyên tắc
-- **Chỉ AGENTS.md chứa nội dung.** Mọi file khác chỉ trỏ về nó.
-- **Ưu tiên import** (`@AGENTS.md`) cho tool hỗ trợ (Claude Code, Gemini) → giữ đúng một nguồn. Tool không hỗ trợ thì để file trỏ ghi rõ "đọc AGENTS.md", đừng dán nội dung.
-- **File trỏ NÊN commit** (khác symlink `.kb` bị gitignore) — để mọi người clone về là có ngay, không cần tool nào cũng cài.
-- **Khi tool ra bản mới đọc AGENTS.md native:** có thể xoá file trỏ tương ứng, nhưng giữ lại cũng không hại.
-
-## Ví dụ nội dung
-`CLAUDE.md` / `GEMINI.md`:
-```
-@AGENTS.md
-```
-`.github/copilot-instructions.md` / `.cursorrules` / `.windsurfrules` / `.clinerules`:
-```
-# Hướng dẫn AI cho project này nằm ở AGENTS.md (gốc repo).
-Hãy đọc và tuân theo `AGENTS.md`, gồm cả các file nó tham chiếu trong `.kb/` và `.kb-local/`.
-```
+Lúc đó chỉ cần mở rộng `link-kb.sh` để sinh thêm các file trỏ này (logic y hệt phần
+`CLAUDE.md` hiện có). Nguyên tắc không đổi: **một nguồn `AGENTS.md`, các file khác chỉ trỏ về.**

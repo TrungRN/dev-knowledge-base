@@ -11,5 +11,4 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Lưu ý: KHÔNG ignore các file trỏ (.clinerules, .cursorrules, .windsurfrules,
-# GEMINI.md, CLAUDE.md, .github/copilot-instructions.md) — chúng cần commit.
+# Lưu ý: KHÔNG ignore CLAUDE.md / AGENTS.md — chúng cần commit.

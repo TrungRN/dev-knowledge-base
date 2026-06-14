@@ -22,9 +22,8 @@
 - [decisions/0001-record-architecture-decisions.md](decisions/0001-record-architecture-decisions.md): Quyết định dùng ADR.
 
 ## Templates (agent dùng để sinh knowledge cho project con)
-- [templates/project-AGENTS.md](templates/project-AGENTS.md): Khung AGENTS.md cho 1 project.
+- [templates/repo-map.md](templates/repo-map.md): Khung mục lục codebase (stack, lệnh, gotchas, module).
 - [templates/project-llms.txt](templates/project-llms.txt): Khung llms.txt cho 1 project.
-- [templates/repo-map.md](templates/repo-map.md): Khung mục lục codebase.
 - [templates/adr.md](templates/adr.md): Khung một ADR.
 - [templates/kb-acceptance-checklist.md](templates/kb-acceptance-checklist.md): "Điều kiện cần thoả" khi cập nhật knowledge.
 

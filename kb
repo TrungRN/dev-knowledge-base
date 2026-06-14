@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# kb — CLI tiện dụng cho dev-knowledge-base. Gói mọi script vào một lệnh.
+#
+# Cài (chạy 1 lần) để gõ `kb` ở bất cứ đâu:
+#   echo 'export PATH="'"$PWD"'/dev-knowledge-base:$PATH"' >> ~/.zshrc && source ~/.zshrc
+# Hoặc: ln -s "$PWD/dev-knowledge-base/kb" /usr/local/bin/kb
+set -euo pipefail
+
+# Tự xác định thư mục KB kể cả khi kb được symlink lên PATH
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"; SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+KB_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+S="$KB_DIR/scripts"
+
+cmd="${1:-help}"; [ $# -gt 0 ] && shift
+
+case "$cmd" in
+  bootstrap) exec bash "$S/bootstrap-all.sh" "$@" ;;
+  link)      exec bash "$S/link-kb.sh" "$@" ;;
+  check)     exec bash "$S/kb-drift-check.sh" "$@" ;;
+  stack)     exec bash "$S/detect-stack.sh" "$@" ;;
+  hook)      exec bash "$S/install-claude-hook.sh" "$@" ;;
+  ci)        exec bash "$S/install-hooks.sh" "$@" ;;
+  scan)
+    echo "auto-scan là việc của AI agent. Cách chạy:"
+    echo "  • Claude Code: gõ  /kb-scan   (tự cài sẵn khi 'kb link')"
+    echo "  • Hoặc bảo agent: \"Đọc .kb/prompts/auto-scan.md và làm theo\""
+    ;;
+  drift)
+    echo "Drift check sâu (AI). Cách chạy:"
+    echo "  • Claude Code: gõ  /kb-drift"
+    echo "  • Kiểm nhanh (không cần AI):  kb check"
+    ;;
+  path) echo "$KB_DIR" ;;
+  help|-h|--help)
+    cat <<EOF
+kb — CLI cho dev-knowledge-base
+
+  kb bootstrap [--all]        Nối TẤT CẢ project vào KB (chạy ở thư mục tổng)
+  kb link [path]             Nối MỘT project (mặc định: thư mục hiện tại)
+  kb scan                    Hướng dẫn chạy auto-scan (sinh knowledge bằng AI)
+  kb check [base] [--strict] Kiểm drift nhanh (code đổi mà quên cập nhật knowledge)
+  kb drift                   Hướng dẫn drift check sâu bằng AI
+  kb stack [path]            Dò stack của project
+  kb hook                    Cài Claude Code hook (ép agent đọc index mỗi prompt)
+  kb ci                      Cài drift check cho pre-push hook / CI (opt-in)
+  kb path                    In đường dẫn KB
+  kb help                    Trợ giúp này
+
+Ví dụ thường dùng:
+  cd ~/Work/mywork && kb bootstrap     # nối hết project một lần
+  cd project-a && kb check             # trước khi tạo MR
+EOF
+    ;;
+  *) echo "Lệnh không rõ: '$cmd'. Gõ 'kb help' để xem danh sách." >&2; exit 1 ;;
+esac

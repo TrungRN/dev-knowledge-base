@@ -4,7 +4,18 @@
 > ở đâu" mà không đọc cả repo. Liệt kê signature, KHÔNG kèm thân hàm.
 
 - **Cập nhật lần cuối:** <YYYY-MM-DD> (commit <hash>)
-- **Stack:** <ngôn ngữ / framework>
+- **Stack:** <ngôn ngữ / framework / package manager>
+
+## Lệnh hay dùng
+```
+<cài deps>
+<chạy local>
+<chạy test>
+<lint/format>
+```
+
+## Gotchas / lưu ý legacy
+- <quirk, bẫy, lib lỗi thời, phần code mong manh — bổ sung dần>
 
 ## Cây thư mục (rút gọn)
 ```

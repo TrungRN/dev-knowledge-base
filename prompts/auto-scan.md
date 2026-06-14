@@ -29,11 +29,11 @@ Tạo `.kb-local/repo-map.md` từ `.kb/templates/repo-map.md`:
 - Luồng nghiệp vụ chính: lần theo từ entry point, mô tả 3–7 bước, trỏ file.
 - Phần mong manh / nợ kỹ thuật / lib lỗi thời phát hiện được.
 
-### Bước 3 — Sinh entry & index
-- **`AGENTS.md` ở GỐC project** (không phải trong `.kb-local/`) từ `.kb/templates/project-AGENTS.md` — đây là NGUỒN nội dung, đặt ở gốc để mọi tool tìm thấy. Điền stack, lệnh, gotchas.
-- **File trỏ đa tool** (`CLAUDE.md`, `GEMINI.md`, `.cursorrules`, `.clinerules`, `.github/copilot-instructions.md`...) do `connect-project.sh` tạo sẵn. Nếu thiếu, chạy `.kb/scripts/add-tool-pointers.sh`. KHÔNG dán nội dung vào chúng — chúng chỉ trỏ về AGENTS.md. Xem `.kb/standards/tool-compatibility.md`.
-- `.kb-local/llms.txt` từ `.kb/templates/project-llms.txt`.
-- `.kb-local/repo-map.md` (đã tạo ở Bước 2).
+### Bước 3 — Sinh knowledge vào `.kb-local/` (KHÔNG đụng file ở gốc)
+Tất cả nội dung project nằm trong `.kb-local/`. File `CLAUDE.md` ở gốc do `link-kb.sh`
+tạo sẵn (chỉ trỏ `@.kb/AGENTS.md`) — đừng dán nội dung vào đó.
+- `.kb-local/repo-map.md` (đã tạo ở Bước 2) — điền đầy đủ: **stack, lệnh build/run/test, gotchas** ở đầu file, rồi cây thư mục, module, entry, luồng.
+- `.kb-local/llms.txt` — cập nhật mục lục tài liệu của project.
 - `.kb-local/code-style.md`: formatter/linter & quy ước đọc được từ code thật.
 - `.kb-local/glossary.md`: thuật ngữ domain & tên cũ khó hiểu (ban đầu có thể ngắn).
 - `.kb-local/security-notes.md`: gotcha bảo mật nếu thấy (đừng vá, chỉ ghi).
@@ -47,6 +47,6 @@ Tóm tắt: stack phát hiện, số module, các luồng chính, **danh sách "
 và **câu hỏi cho con người** (chỗ code mơ hồ không suy ra được). Đừng bịa khi không chắc.
 
 ### Ràng buộc
-- Không sửa code nguồn. Chỉ tạo/sửa: `AGENTS.md` + `CLAUDE.md` (gốc project), `.kb-local/`, và `.kb/registry.yaml`.
+- Không sửa code nguồn. Chỉ tạo/sửa: `.kb-local/` và `.kb/registry.yaml`. (Đừng đụng `CLAUDE.md` ở gốc — link-kb đã lo.)
 - Index dạng text, signature không kèm thân hàm (xem `.kb/standards/indexing.md`).
 - Ngắn gọn, trỏ-đừng-nhúng. Mục tiêu là bản đồ tra cứu, không phải bản sao codebase.

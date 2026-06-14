@@ -1,49 +1,47 @@
-# Playbook: Nối một project vào KB
+# Playbook: Nối project vào KB
 
-Mục tiêu: project con trỏ tới KB chung qua symlink `.kb` (một bản vật lý, không copy),
-và có thư mục `.kb-local/` cho knowledge riêng.
+Mục tiêu: mỗi project trỏ tới KB chung qua symlink `.kb` (một bản vật lý, không copy),
+có `.kb-local/` cho knowledge riêng, và **tôn trọng file agent sẵn có** của project
+(chỉ chèn một khối trỏ sang KB, không ghi đè).
 
 ## Yêu cầu vị trí
-Project và `dev-knowledge-base` nên đặt **ngang hàng**:
+`dev-knowledge-base` đặt **ngang hàng** các project, trong cùng thư mục tổng:
 ```
-~/Work/
-├── dev-knowledge-base/            ← KB này
+~/Work/mywork/
+├── dev-knowledge-base/   ← KB này
 ├── project-a/
 └── project-b/
 ```
 
-## Cách 1 — dùng script (khuyến nghị)
-**Chạy từ TRONG project con** — quy ước chuẩn (không cần truyền tham số):
+## Cách 1 — bootstrap MỘT LẦN cho tất cả (khuyến nghị)
+Đứng ở thư mục tổng:
 ```bash
-cd ../project-a
-../dev-knowledge-base/scripts/connect-project.sh
+./dev-knowledge-base/scripts/bootstrap-all.sh           # chỉ các git repo
+./dev-knowledge-base/scripts/bootstrap-all.sh --all     # gồm cả thư mục chưa git
 ```
-Hoặc chạy từ bất cứ đâu và truyền đường dẫn project:
+Quét mọi project con, nối từng cái. **Idempotent** — chạy lại bất cứ lúc nào để nối
+project mới, không ghi đè gì.
+
+## Cách 2 — nối một project lẻ
 ```bash
-/đường-dẫn/dev-knowledge-base/scripts/connect-project.sh ../project-a
+cd project-a
+../dev-knowledge-base/scripts/link-kb.sh        # hoặc connect-project.sh (cùng tác dụng)
 ```
-Chạy từ đâu cũng cho kết quả như nhau — script tự xác định vị trí KB qua chính nó.
-Nó sẽ: tạo symlink `project-a/.kb -> dev-knowledge-base`, tạo `project-a/.kb-local/`,
-thêm gợi ý `.gitignore`, và in bước tiếp theo.
+Hoặc truyền đường dẫn: `.../link-kb.sh ../project-a`. Chạy từ đâu cũng như nhau.
 
-> Vì sao "từ trong project con"? Mô hình tư duy "đưa *project này* vào KB"; liền mạch
-> với bước auto-scan (bạn vốn đã ở trong project); người mới clone về tái lập symlink
-> bằng đúng câu lệnh đó.
+## Mỗi project được gì
+- `.kb -> ../dev-knowledge-base` (symlink, không commit).
+- `.kb-local/` + skeleton `repo-map.md`, `llms.txt` (commit; auto-scan điền chi tiết sau).
+- `CLAUDE.md` (tập trung Claude Code):
+  - **Chưa có** → tạo mới, trỏ về `@.kb/AGENTS.md`.
+  - **Đã có** → GIỮ NGUYÊN nội dung, chỉ chèn một khối có marker `# >>> ... (agent-kb) >>>` trỏ sang KB. Chạy lại không chèn lần hai.
+- `.claude/commands/` — slash command `/kb-scan`, `/kb-drift`, `/kb-onboard` (tự cài).
 
-## Cách 2 — thủ công
-```bash
-cd ../project-a
-ln -s ../dev-knowledge-base .kb          # symlink tới KB chung (đổi ../dev-knowledge-base cho đúng tên thật)
-mkdir -p .kb-local/adr
-```
+## Sau khi nối (tùy chọn, mỗi project)
+1. **Làm giàu knowledge:** trong Claude Code gõ `/kb-scan` (hoặc bảo agent "Đọc `.kb/prompts/auto-scan.md` và làm theo") → điền chi tiết `.kb-local/repo-map.md`, đăng ký vào `registry.yaml`.
+2. **Commit:** `.kb-local/`, `AGENTS.md`, các file trỏ. KHÔNG commit `.kb`.
 
-## Sau khi nối
-1. **Sinh knowledge:** mở agent trong `project-a`, đưa nội dung `.kb/prompts/auto-scan.md`. Agent tạo `AGENTS.md`, `.kb-local/repo-map.md`, `llms.txt`...
-2. **Đăng ký:** auto-scan tự thêm project vào `.kb/registry.yaml` (hoặc thêm tay).
-3. **Git:** commit `.kb-local/` và `AGENTS.md` vào repo project. Symlink `.kb` thì
-   gitignore (vì nó trỏ ra ngoài, phụ thuộc máy) — xem ghi chú dưới.
-
-## Ghi chú về symlink & git
-- `.kb` là symlink ra ngoài repo, **không nên commit** (mỗi máy bố trí thư mục khác nhau). Cho vào `.gitignore`.
-- Người mới clone project chỉ cần chạy lại `connect-project.sh` (hoặc tạo symlink) một lần để tái lập `.kb`.
-- Knowledge thật (`.kb-local/`) thì **commit bình thường** — nó versioned cùng code.
+## Ghi chú symlink & git
+- `.kb` là symlink ra ngoài repo → **gitignore** (mỗi máy bố trí khác nhau). Người mới clone chạy lại bootstrap/link-kb một lần để tái lập.
+- `.kb-local/` và các file agent thì **commit bình thường** (versioned cùng code).
+- Khối `(agent-kb)` trong file agent: **đừng xoá**; muốn đổi luật thì sửa ở `dev-knowledge-base`, không sửa rải rác.
