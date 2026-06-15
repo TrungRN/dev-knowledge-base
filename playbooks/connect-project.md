@@ -13,11 +13,12 @@ có `.kb-local/` cho knowledge riêng, và **tôn trọng file agent sẵn có**
 └── project-b/
 ```
 
-## Cách 1 — bootstrap MỘT LẦN cho tất cả (khuyến nghị)
-Đứng ở thư mục tổng:
+## Cách 1 — init MỘT LẦN cho tất cả (khuyến nghị)
+Dễ nhất: mở Claude Code trên thư mục `dev-knowledge-base` rồi gõ **`/kb-init`**.
+Hoặc Terminal:
 ```bash
-./dev-knowledge-base/scripts/bootstrap-all.sh           # chỉ các git repo
-./dev-knowledge-base/scripts/bootstrap-all.sh --all     # gồm cả thư mục chưa git
+./dev-knowledge-base/scripts/init-all.sh           # chỉ các git repo
+./dev-knowledge-base/scripts/init-all.sh --all     # gồm cả thư mục chưa git
 ```
 Quét mọi project con, nối từng cái. **Idempotent** — chạy lại bất cứ lúc nào để nối
 project mới, không ghi đè gì.
@@ -42,6 +43,6 @@ Hoặc truyền đường dẫn: `.../link-kb.sh ../project-a`. Chạy từ đâ
 2. **Commit:** `.kb-local/`, `AGENTS.md`, các file trỏ. KHÔNG commit `.kb`.
 
 ## Ghi chú symlink & git
-- `.kb` là symlink ra ngoài repo → **gitignore** (mỗi máy bố trí khác nhau). Người mới clone chạy lại bootstrap/link-kb một lần để tái lập.
+- `.kb` là symlink ra ngoài repo → **gitignore** (mỗi máy bố trí khác nhau). Người mới clone gõ `/kb-init` (hoặc `/kb-link`) một lần để tái lập.
 - `.kb-local/` và các file agent thì **commit bình thường** (versioned cùng code).
 - Khối `(agent-kb)` trong file agent: **đừng xoá**; muốn đổi luật thì sửa ở `dev-knowledge-base`, không sửa rải rác.

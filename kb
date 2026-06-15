@@ -18,7 +18,7 @@ S="$KB_DIR/scripts"
 cmd="${1:-help}"; [ $# -gt 0 ] && shift
 
 case "$cmd" in
-  bootstrap) exec bash "$S/bootstrap-all.sh" "$@" ;;
+  init|bootstrap) exec bash "$S/init-all.sh" "$@" ;;
   link)      exec bash "$S/link-kb.sh" "$@" ;;
   check)     exec bash "$S/kb-drift-check.sh" "$@" ;;
   stack)     exec bash "$S/detect-stack.sh" "$@" ;;
@@ -39,7 +39,7 @@ case "$cmd" in
     cat <<EOF
 kb — CLI cho dev-knowledge-base
 
-  kb bootstrap [--all]        Nối TẤT CẢ project vào KB (chạy ở thư mục tổng)
+  kb init [--all]             Nối TẤT CẢ project vào KB (chạy ở thư mục tổng)
   kb link [path]             Nối MỘT project (mặc định: thư mục hiện tại)
   kb scan                    Hướng dẫn chạy auto-scan (sinh knowledge bằng AI)
   kb check [base] [--strict] Kiểm drift nhanh (code đổi mà quên cập nhật knowledge)
@@ -51,7 +51,7 @@ kb — CLI cho dev-knowledge-base
   kb help                    Trợ giúp này
 
 Ví dụ thường dùng:
-  cd ~/Work/mywork && kb bootstrap     # nối hết project một lần
+  cd ~/Work/mywork && kb init           # nối hết project một lần
   cd project-a && kb check             # trước khi tạo MR
 EOF
     ;;
