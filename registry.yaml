@@ -19,7 +19,7 @@ projects:
     entrypoints:                     # điểm vào quan trọng nhất để hiểu project
       - "src/main/java/.../Application.java"
     kb:
-      agents: ".kb-local/AGENTS.md"  # AGENTS.md riêng của project
+      agents: "AGENTS.md"            # nguồn luật: CLAUDE.md + .kb/AGENTS.md (KB chung)
       repo_map: ".kb-local/repo-map.md"
       llms: ".kb-local/llms.txt"
     docs:
