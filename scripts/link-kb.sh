@@ -116,8 +116,24 @@ if pat.search(text):
 else:
     print("• CLAUDE.md (đã có tham chiếu KB)")
 PY
+  elif grep -qF "$ME" "$CLAUDE_FILE"; then
+    # Fallback không cần python3: dùng awk thay phần giữa hai marker (literal, không regex).
+    # Chỉ chạy khi có ĐỦ cả marker đầu+cuối để không bao giờ nuốt nội dung ngoài block.
+    _TB="$(mktemp)"; _TO="$(mktemp)"
+    printf '%s\n' "$NEW_BLOCK" > "$_TB"
+    if awk -v mb="$MB" -v me="$ME" -v bf="$_TB" '
+        { if (!ins && index($0, mb)) { while ((getline l < bf) > 0) print l; close(bf); ins=1; next }
+          if (ins) { if (index($0, me)) ins=0; next }
+          print }
+      ' "$CLAUDE_FILE" > "$_TO"; then
+      cat "$_TO" > "$CLAUDE_FILE"
+      echo "• CLAUDE.md (cập nhật khối KB → có fallback; qua awk, không cần python3)"
+    else
+      echo "• CLAUDE.md (đã có tham chiếu KB — không tự cập nhật được, sửa tay nếu cần)"
+    fi
+    rm -f "$_TB" "$_TO"
   else
-    echo "• CLAUDE.md (đã có tham chiếu KB — muốn cập nhật fallback thì sửa tay)"
+    echo "• CLAUDE.md (có marker đầu nhưng thiếu marker cuối — giữ nguyên, sửa tay nếu cần)"
   fi
 else
   printf '\n%s\n' "$NEW_BLOCK" >> "$CLAUDE_FILE"

@@ -20,6 +20,11 @@ Không cần người nhắc — tự thực hiện theo thứ tự:
 4. Nếu thay đổi đụng module/API/luồng/quyết định → cập nhật `.kb-local/` trong cùng PR.
 5. Trước khi xong → đối chiếu `templates/kb-acceptance-checklist.md`.
 
+> **Đang đứng trong CHÍNH repo KB này (dev-knowledge-base), không phải project con?**
+> Không có symlink `.kb`/`.kb-local` ở đây. Thay vào đó đọc index của bản thân KB:
+> `projects/dev-knowledge-base/.kb-local/repo-map.md` + `llms.txt` (gốc repo), rồi tra
+> `registry.yaml`/`templates/` trực tiếp (bỏ tiền tố `.kb/`). KB tự áp dụng luật của mình.
+
 ## Cách dùng KB này
 
 - **Onboard / hiểu nhanh project:** đọc `.kb/AGENTS.md` của project → `.kb/repo-map.md` → `playbooks/onboarding.md`.

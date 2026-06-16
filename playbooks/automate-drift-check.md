@@ -3,8 +3,8 @@
 Drift check có ba mức độ "tự động". Mặc định dùng **mức 1** vì nó không đụng gì tới
 git server nên không cần lead duyệt. Mức 2–3 là opt-in, bật khi đã được thông qua.
 
-Lưu ý mới: `.kb-local/` giờ là symlink trỏ về `projects/<tên>/.kb-local/` trong
-KB trung tâm. Drift check so code đổi ở repo project con với knowledge đổi ở repo KB.
+Lưu ý: `.kb-local/` là symlink trỏ về `projects/<tên>/.kb-local/` trong KB trung tâm.
+Drift check so code đổi ở repo project con với knowledge đổi ở repo KB.
 
 ## Mức 1 — Script độc lập, dev chủ động chạy (MẶC ĐỊNH)
 Không cài gì, không đụng git config/CI. Từ trong project đã nối KB:

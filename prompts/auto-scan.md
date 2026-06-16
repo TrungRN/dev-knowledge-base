@@ -43,15 +43,19 @@ nội dung vào đó.
 - `.kb-local/security-notes.md`: gotcha bảo mật nếu thấy (đừng vá, chỉ ghi).
 
 ### Bước 4 — Đăng ký vào registry
-Thêm/cập nhật entry của project trong `.kb/registry.yaml`: id, name, path, stack,
-entrypoints, đường dẫn kb (dùng `projects/<tên>/.kb-local/...`), `last_scanned` = hôm nay.
+Thêm/cập nhật entry của project trong `registry.yaml` **ở gốc repo KB trung tâm**
+(đường dẫn thật: `<KB_DIR>/registry.yaml`; trong project con thấy qua symlink
+`.kb/registry.yaml` — sửa file này thực chất ghi vào repo KB, KHÔNG vào repo project con).
+Điền: `id` (= tên thư mục project), name, path, stack, entrypoints, đường dẫn kb
+(dùng `projects/<tên>/.kb-local/...`), `last_scanned` = hôm nay.
 
 ### Bước 5 — Báo cáo
 Tóm tắt: stack phát hiện, số module, các luồng chính, **danh sách "cần xác nhận"**
 và **câu hỏi cho con người** (chỗ code mơ hồ không suy ra được). Đừng bịa khi không chắc.
 
 ### Ràng buộc
-- Không sửa code nguồn. Chỉ tạo/sửa: `.kb-local/` (trong KB trung tâm) và `.kb/registry.yaml`.
+- Không sửa code nguồn. Chỉ tạo/sửa: `.kb-local/` và `registry.yaml` — cả hai đều nằm
+  trong repo KB trung tâm (project con chỉ thấy qua symlink `.kb-local/`, `.kb/registry.yaml`).
   (Đừng đụng `CLAUDE.md` ở gốc project — link-kb đã lo.)
 - Index dạng text, signature không kèm thân hàm (xem `.kb/standards/indexing.md`).
 - Ngắn gọn, trỏ-đừng-nhúng. Mục tiêu là bản đồ tra cứu, không phải bản sao codebase.

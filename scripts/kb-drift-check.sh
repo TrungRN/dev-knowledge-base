@@ -65,10 +65,12 @@ MB_KB="$(merge_base "$KB_DIR" "$BASE")"
 # ---------- Danh sách file thay đổi ----------
 CHANGED_PROJ="$(git -C "$PROJ_ROOT" diff --name-only "$MB_PROJ"...HEAD 2>/dev/null || git -C "$PROJ_ROOT" diff --name-only "$BASE")"
 CHANGED_KB="$(git -C "$KB_DIR" diff --name-only "$MB_KB"...HEAD -- "$KNOWLEDGE_PREFIX" 2>/dev/null || true)"
-# Bổ sung cả thay đổi chưa commit (working tree + staged) trong KB — vì knowledge thường đang sửa dở
-_KB_UNTRACKED="$(git -C "$KB_DIR" diff --name-only -- "$KNOWLEDGE_PREFIX" 2>/dev/null || true)"
+# Bổ sung cả thay đổi chưa commit (working tree + staged + untracked) trong KB — knowledge thường đang sửa dở
+_KB_WORKTREE="$(git -C "$KB_DIR" diff --name-only -- "$KNOWLEDGE_PREFIX" 2>/dev/null || true)"
 _KB_STAGED="$(git -C "$KB_DIR" diff --cached --name-only -- "$KNOWLEDGE_PREFIX" 2>/dev/null || true)"
-CHANGED_KB_UNCOMMITTED="$(printf '%s\n%s\n' "$_KB_UNTRACKED" "$_KB_STAGED")"
+# File knowledge mới tạo nhưng CHƯA git add (untracked) — nếu không tính sẽ báo drift sai
+_KB_NEW="$(git -C "$KB_DIR" ls-files --others --exclude-standard -- "$KNOWLEDGE_PREFIX" 2>/dev/null || true)"
+CHANGED_KB_UNCOMMITTED="$(printf '%s\n%s\n%s\n' "$_KB_WORKTREE" "$_KB_STAGED" "$_KB_NEW")"
 
 if [ -z "${CHANGED_PROJ//[[:space:]]/}" ] && [ -z "${CHANGED_KB//[[:space:]]/}" ] && [ -z "${CHANGED_KB_UNCOMMITTED//[[:space:]]/}" ]; then
   echo "kb-drift: không có thay đổi để kiểm. ✓"; exit 0

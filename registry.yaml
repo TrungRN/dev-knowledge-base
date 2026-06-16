@@ -3,17 +3,22 @@
 # Schema thiết kế MCP-ready: giai đoạn 2 có thể bọc dev-knowledge-base thành MCP server
 # đọc đúng file này và serve thành tool, không đổi data model.
 #
-# Lưu ý: knowledge riêng project (.kb-local) giờ nằm trong KB trung tâm,
+# Lưu ý: knowledge riêng project (.kb-local) nằm trong KB trung tâm,
 # tại projects/<id>/.kb-local/. Project con truy xuất qua symlink .kb-local.
-# Đây là template — thay <PROJECT-ID>, <TÊN>, <PATH> bằng project thật khi dùng.
+#
+# QUY ƯỚC QUAN TRỌNG: `id` PHẢI bằng đúng TÊN THƯ MỤC của repo project con.
+# scripts/link-kb.sh dùng `basename` của project để suy ra projects/<tên>/.kb-local/,
+# nên nếu `id` lệch tên thư mục thì đường dẫn kb dưới đây sẽ trỏ sai.
+#
+# Đây là template — thay <PROJECT-ID> (= tên thư mục), <TÊN>, <PATH> bằng project thật.
 
 version: 2
 updated: 2026-06-15
 
 projects:
-  - id: <PROJECT-ID>                   # định danh ngắn, duy nhất
-    name: "<TÊN PROJECT>"              # tên người-đọc
-    path: "../<project-dir>"          # đường dẫn tương đối từ dev-knowledge-base (cùng cấp)
+  - id: <PROJECT-ID>                   # = TÊN THƯ MỤC project con (basename của path)
+    name: "<TÊN PROJECT>"              # tên người-đọc (có thể khác id)
+    path: "../<project-dir>"          # đường dẫn tương đối từ dev-knowledge-base (cùng cấp); basename phải = id
     status: active                     # active | maintenance | archived
     stack:                             # do auto-scan điền
       languages: []

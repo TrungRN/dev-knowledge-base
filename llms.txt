@@ -24,6 +24,7 @@
 ## Projects (knowledge riêng từng project — trong repo KB trung tâm)
 - [registry.yaml](registry.yaml): Danh bạ project → đường dẫn tới `projects/<tên>/.kb-local/`.
 - [projects/](projects/): Mỗi project có thư mục riêng chứa `.kb-local/` (repo-map, llms.txt, adr...).
+- [projects/dev-knowledge-base/.kb-local/repo-map.md](projects/dev-knowledge-base/.kb-local/repo-map.md): Repo map của CHÍNH KB này — đọc khi sửa source KB (CLI, scripts, templates).
 
 ## Templates (agent dùng để sinh knowledge cho project con)
 - [templates/repo-map.md](templates/repo-map.md): Khung mục lục codebase (stack, lệnh, gotchas, module).

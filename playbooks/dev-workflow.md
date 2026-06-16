@@ -2,9 +2,8 @@
 
 Một vòng từ lúc nhận task tới lúc merge. Mỗi bước trỏ tới file liên quan trong KB.
 
-Lưu ý mới: `.kb-local/` giờ là symlink trỏ về `projects/<tên>/.kb-local/` trong
-KB trung tâm. Knowledge riêng project versioned cùng repo KB, không còn trong repo
-project con.
+Lưu ý: `.kb-local/` là symlink trỏ về `projects/<tên>/.kb-local/` trong KB trung tâm.
+Knowledge riêng project versioned cùng repo KB, không nằm trong repo project con.
 
 ## Sơ đồ nhanh
 ```

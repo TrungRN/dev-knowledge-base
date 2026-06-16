@@ -54,8 +54,27 @@ else:
     json.dump(cur, open(cur_path, "w"), ensure_ascii=False, indent=2)
     print("• Đã merge hook vào " + cur_path)
 PY
+elif command -v jq >/dev/null 2>&1; then
+  # Fallback không cần python3: merge bằng jq (vẫn idempotent).
+  if jq -e '..|.command? // empty | select(test("remind-read-index.sh"))' "$SETTINGS" >/dev/null 2>&1; then
+    echo "• Hook đã có trong settings.json — bỏ qua."
+  else
+    _TMP="$(mktemp)"
+    if jq -s '
+        .[0] as $cur | .[1] as $snip
+        | $cur
+        | .hooks = (.hooks // {})
+        | .hooks.UserPromptSubmit = (((.hooks.UserPromptSubmit) // []) + $snip.hooks.UserPromptSubmit)
+      ' "$SETTINGS" "$SNIPPET" > "$_TMP" 2>/dev/null && [ -s "$_TMP" ]; then
+      cat "$_TMP" > "$SETTINGS"
+      echo "• Đã merge hook vào $SETTINGS (qua jq, không cần python3)."
+    else
+      echo "• $SETTINGS có nhưng merge bằng jq thất bại — thêm tay khối UserPromptSubmit từ: $SNIPPET"
+    fi
+    rm -f "$_TMP"
+  fi
 else
-  echo "• $SETTINGS đã tồn tại và không có python3 để merge an toàn."
+  echo "• $SETTINGS đã tồn tại và không có python3/jq để merge an toàn."
   echo "  Thêm tay khối UserPromptSubmit từ: $SNIPPET"
 fi
 
