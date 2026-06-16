@@ -1,6 +1,9 @@
 # KB drift check cho GitHub Actions — chạy tự động trên Pull Request.
 # Cài: copy file này -> .github/workflows/kb-drift.yml trong project.
 #
+# Lưu ý quan trọng: .kb-local/ giờ là symlink trỏ về KB trung tâm.
+# Workflow cần checkout cả repo project con và repo dev-knowledge-base ở ngang hàng.
+#
 # Mặc định CẢNH BÁO (không chặn). Muốn CHẶN merge: thêm '--strict' vào lệnh chạy
 # và đặt branch protection yêu cầu job này pass.
 
@@ -15,6 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0      # cần full history để so với nhánh đích
+          fetch-depth: 0          # cần full history để so với nhánh đích
+          path: <project-dir>     # <-- THAY bằng tên thư mục project con
+      - name: Checkout KB trung tâm
+        uses: actions/checkout@v4
+        with:
+          repository: owner/dev-knowledge-base  # <-- THAY bằng repo KB thật
+          path: dev-knowledge-base
       - name: Run KB drift check
+        working-directory: <project-dir>      # <-- THAY bằng tên thư mục project con
         run: bash .kb-local/ci/kb-drift-check.sh "origin/${{ github.base_ref }}"

@@ -1,10 +1,15 @@
 # KB drift check cho GitLab CI — chạy tự động trên Merge Request.
 #
+# Lưu ý quan trọng: .kb-local/ giờ là symlink trỏ về KB trung tâm.
+# CI runner cần checkout cả repo project con và repo dev-knowledge-base ở ngang hàng,
+# hoặc dùng remote include từ repo KB.
+#
 # Cách bật (chọn 1):
-#   A) include vào .gitlab-ci.yml của project:
+#   A) Checkout KB trung tâm trong CI và include file từ project con:
 #        include:
 #          - local: '.kb-local/ci/gitlab-ci.kb-drift.yml'
-#   B) hoặc copy nguyên job dưới đây vào .gitlab-ci.yml sẵn có.
+#      (yêu cầu CI checkout dev-knowledge-base ở ngang hàng project con.)
+#   B) Hoặc copy nguyên job dưới đây vào .gitlab-ci.yml sẵn có, tự xử lý checkout KB.
 #
 # Mặc định CẢNH BÁO (allow_failure: true) → hiện ⚠ trên MR nhưng không chặn merge.
 # Muốn CHẶN merge: đặt allow_failure: false và thêm '--strict' vào script.
@@ -17,5 +22,6 @@ kb-drift-check:
     GIT_DEPTH: "0"          # cần full history để so với nhánh đích
   script:
     - git fetch -q origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" || true
+    # Nếu KB trung tâm chưa được checkout kèm, hãy thêm bước clone ở đây.
     - bash .kb-local/ci/kb-drift-check.sh "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
   allow_failure: true       # đổi false để CHẶN merge khi có drift

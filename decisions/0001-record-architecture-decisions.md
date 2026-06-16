@@ -11,7 +11,8 @@ onboarding, tránh phá nhầm, và để AI agent đọc hiểu được nền 
 
 ## Quyết định
 Mọi quyết định kiến trúc quan trọng được ghi thành một ADR dạng markdown, lưu trong
-repo (`decisions/` cho KB chung, `.kb-local/adr/` cho project con), versioned theo git.
+repo (`decisions/` cho KB chung, `.kb-local/adr/` cho project con — thực chất nằm
+trong repo KB trung tâm tại `projects/<tên>/.kb-local/adr/`), versioned theo git.
 
 ## Các lựa chọn đã cân nhắc
 - **ADR trong repo (đã chọn):** đi cùng code, review trong PR, không drift, agent đọc trực tiếp rẻ.

@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-# kb — CLI tiện dụng cho dev-knowledge-base. Gói mọi script vào một lệnh.
+# kb — CLI một cổng cho dev-knowledge-base.
 #
 # Cài (chạy 1 lần) để gõ `kb` ở bất cứ đâu:
 #   echo 'export PATH="'"$PWD"'/dev-knowledge-base:$PATH"' >> ~/.zshrc && source ~/.zshrc
 # Hoặc: ln -s "$PWD/dev-knowledge-base/kb" /usr/local/bin/kb
+#
+# Từ giai đoạn này, .kb-local/ của mỗi project nằm trong KB trung tâm:
+#   projects/<tên-project>/.kb-local/
+# Project con chỉ giữ symlink .kb + .kb-local (tuyệt đối) và CLAUDE.md.
 set -euo pipefail
 
 # Tự xác định thư mục KB kể cả khi kb được symlink lên PATH
@@ -15,44 +19,55 @@ done
 KB_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 S="$KB_DIR/scripts"
 
+cmd_scan() {
+  TARGET="${1:-$PWD}"
+  PROJ="$(cd "$TARGET" && pwd)" || { echo "Không tìm thấy: $TARGET" >&2; exit 1; }
+  BASE="$(basename "$PROJ")"
+  echo "=== kb scan: $BASE ==="
+  bash "$S/link-kb.sh" "$PROJ"
+  echo ""
+  bash "$S/detect-stack.sh" "$PROJ"
+  echo ""
+  echo "Bước tiếp theo: mở project trong Claude Code và gõ /kb-scan"
+  echo "để agent điền chi tiết vào projects/$BASE/.kb-local/ trong KB trung tâm."
+}
+
 cmd="${1:-help}"; [ $# -gt 0 ] && shift
 
 case "$cmd" in
   init|bootstrap) exec bash "$S/init-all.sh" "$@" ;;
   link)      exec bash "$S/link-kb.sh" "$@" ;;
+  scan)      cmd_scan "$@" ;;
   check)     exec bash "$S/kb-drift-check.sh" "$@" ;;
+  drift)     echo "Drift check sâu (AI): mở project trong Claude Code và gõ /kb-drift" ;;
   stack)     exec bash "$S/detect-stack.sh" "$@" ;;
   hook)      exec bash "$S/install-claude-hook.sh" "$@" ;;
   ci)        exec bash "$S/install-hooks.sh" "$@" ;;
-  scan)
-    echo "auto-scan là việc của AI agent. Cách chạy:"
-    echo "  • Claude Code: gõ  /kb-scan   (tự cài sẵn khi 'kb link')"
-    echo "  • Hoặc bảo agent: \"Đọc .kb/prompts/auto-scan.md và làm theo\""
-    ;;
-  drift)
-    echo "Drift check sâu (AI). Cách chạy:"
-    echo "  • Claude Code: gõ  /kb-drift"
-    echo "  • Kiểm nhanh (không cần AI):  kb check"
-    ;;
-  path) echo "$KB_DIR" ;;
+  path)      echo "$KB_DIR" ;;
   help|-h|--help)
     cat <<EOF
 kb — CLI cho dev-knowledge-base
 
   kb init [--all]             Nối TẤT CẢ project vào KB (chạy ở thư mục tổng)
-  kb link [path]             Nối MỘT project (mặc định: thư mục hiện tại)
-  kb scan                    Hướng dẫn chạy auto-scan (sinh knowledge bằng AI)
-  kb check [base] [--strict] Kiểm drift nhanh (code đổi mà quên cập nhật knowledge)
-  kb drift                   Hướng dẫn drift check sâu bằng AI
-  kb stack [path]            Dò stack của project
-  kb hook                    Cài Claude Code hook (ép agent đọc index mỗi prompt)
-  kb ci                      Cài drift check cho pre-push hook / CI (opt-in)
-  kb path                    In đường dẫn KB
-  kb help                    Trợ giúp này
+  kb link [path]              Nối MỘT project (mặc định: thư mục hiện tại)
+  kb scan [path]              Chuẩn bị .kb-local trong KB + dò stack
+  kb check [base] [--strict]  Kiểm drift nhanh (code đổi mà quên cập nhật knowledge)
+  kb drift                    Hướng dẫn drift check sâu bằng AI
+  kb stack [path]             Dò stack của project
+  kb hook [path]              Cài Claude Code hook (ép agent đọc index)
+  kb ci [path]                Cài drift check cho pre-push / CI (opt-in)
+  kb path                     In đường dẫn KB
+  kb help                     Trợ giúp này
 
 Ví dụ thường dùng:
   cd ~/Work/mywork && kb init           # nối hết project một lần
   cd project-a && kb check             # trước khi tạo MR
+  cd project-a && kb scan              # chuẩn bị .kb-local trước khi dùng /kb-scan
+
+Lưu ý:
+  • .kb-local/ giờ nằm trong KB trung tâm: projects/<tên>/.kb-local/
+  • Project con chỉ giữ symlink .kb + .kb-local (không commit).
+  • Nếu chưa link KB, agent sẽ bỏ qua tham chiếu .kb theo fallback trong CLAUDE.md.
 EOF
     ;;
   *) echo "Lệnh không rõ: '$cmd'. Gõ 'kb help' để xem danh sách." >&2; exit 1 ;;

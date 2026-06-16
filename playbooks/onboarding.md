@@ -2,6 +2,10 @@
 
 Lộ trình đọc theo thứ tự — từ tổng quan tới chi tiết, tiết kiệm thời gian & token.
 
+> Lưu ý: `.kb-local/` trong project con là symlink trỏ về `projects/<tên-project>/.kb-local/`
+> trong repo KB trung tâm. Mọi file `.kb-local/...` dưới đây đều được đọc qua symlink đó.
+> Nếu project chưa link KB, agent sẽ bỏ qua phần `.kb-local` theo fallback trong `CLAUDE.md`.
+
 ## 30 phút đầu — bức tranh lớn
 1. `.kb/README.md` — KB hoạt động thế nào.
 2. Project's `AGENTS.md` — project này là gì, stack, lệnh build/run/test.
@@ -25,11 +29,11 @@ Những việc dưới đây đã là **luật trong `AGENTS.md`**, và agent (C
 Codex...) **tự nạp AGENTS.md ngay đầu mỗi phiên** — nên nó tự làm mà bạn không cần dặn:
 - Đọc `repo-map.md` + `llms.txt` trước khi trả lời (đúng & rẻ token hơn).
 - Tra `.kb/registry.yaml` khi cần thông tin project khác.
-- Sửa `.kb-local/` ngay trong PR khi đụng module/API/luồng (văn hoá của KB).
+- Sửa `.kb-local/` trong repo KB trung tâm khi đụng module/API/luồng (văn hoá của KB).
 
 Bạn chỉ cần ra task bình thường ("thêm chức năng X", "vì sao luồng Y lỗi"). Muốn agent
 tuân chặt hơn, sửa luật ở `AGENTS.md` (một nguồn) — đừng nhắc lại trong từng prompt.
 
-> Muốn ÉP chắc tay (tầng cứng, Claude Code): chạy `.kb/scripts/install-claude-hook.sh`
+> Muốn ÉP chắc tay (tầng cứng, Claude Code): chạy `kb hook`
 > để cài hook tự chèn nhắc "đọc index trước" vào mỗi prompt. Trường hợp tool/web UI
 > không tự nạp file chỉ-dẫn: dán `AGENTS.md` vào đầu phiên.

@@ -6,7 +6,8 @@ Dùng index dạng **text có cấu trúc** — KHÔNG vector/embedding (xem lý
 ## Hai tầng index (mỗi project phải có)
 
 ### 1. `llms.txt` — bản đồ điều hướng
-Đặt ở gốc KB và gốc `.kb-local/` của mỗi project. Liệt kê "có tài liệu/khu vực gì,
+Đặt ở gốc KB và trong `.kb-local/` của mỗi project (`.kb-local/` là symlink tới
+`projects/<tên>/.kb-local/` trong repo KB trung tâm). Liệt kê "có tài liệu/khu vực gì,
 mô tả 1 dòng, đường dẫn". Agent đọc file nhỏ này TRƯỚC rồi mới fetch đúng file.
 Format: tiêu đề `#`, blockquote mô tả, các nhóm `##`, mỗi mục là `- [tên](đường-dẫn): mô tả 1 dòng`.
 
@@ -22,7 +23,7 @@ Mục lục cấu trúc của project, do auto-scan sinh. Gồm:
 - **Entry file mỏng.** AGENTS.md & llms.txt skim được trong 1 phút. Chi tiết để sau `@import`/đường dẫn, nạp theo nhu cầu.
 - **Trỏ, đừng nhúng.** Index chứa đường dẫn + mô tả, không copy nội dung file.
 - **Signature, không thân hàm.** Repo map liệt kê chữ ký, agent đọc thân khi cần.
-- **Refresh theo PR.** Code đổi → repo map đổi trong cùng PR (xem `prompts/review-kb-drift.md`). Index lệch còn tệ hơn không có index.
+- **Refresh theo PR.** Code đổi → repo map đổi trong repo KB trung tâm (`projects/<tên>/.kb-local/repo-map.md`; thường là PR riêng của repo KB). Xem `prompts/review-kb-drift.md`. Index lệch còn tệ hơn không có index.
 
 ## Vì sao KHÔNG vector/embedding (ở giai đoạn này)
 - Codebase có tín hiệu **tất định** tốt hơn ngữ nghĩa mờ: tên file, cây thư mục, import, signature. Repo map text + `grep`/đọc trực tiếp là đủ và chính xác.

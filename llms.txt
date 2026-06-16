@@ -21,6 +21,10 @@
 - [decisions/README.md](decisions/README.md): ADR là gì, khi nào viết.
 - [decisions/0001-record-architecture-decisions.md](decisions/0001-record-architecture-decisions.md): Quyết định dùng ADR.
 
+## Projects (knowledge riêng từng project — trong repo KB trung tâm)
+- [registry.yaml](registry.yaml): Danh bạ project → đường dẫn tới `projects/<tên>/.kb-local/`.
+- [projects/](projects/): Mỗi project có thư mục riêng chứa `.kb-local/` (repo-map, llms.txt, adr...).
+
 ## Templates (agent dùng để sinh knowledge cho project con)
 - [templates/repo-map.md](templates/repo-map.md): Khung mục lục codebase (stack, lệnh, gotchas, module).
 - [templates/project-llms.txt](templates/project-llms.txt): Khung llms.txt cho 1 project.

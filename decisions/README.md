@@ -17,4 +17,5 @@ Không cần ADR cho: sửa bug nhỏ, đổi tên biến, tinh chỉnh style.
 
 ## Quy ước
 - ADR **không sửa nội dung cũ** khi đã Accepted. Quyết định mới → ADR mới, đánh dấu superseded cái cũ. Giữ nguyên lịch sử để hiểu diễn tiến.
-- ADR của **project con** để trong `.kb-local/adr/` của project đó. ADR cấp KB chung để ở đây.
+- ADR của **project con** để trong `.kb-local/adr/` (thực chất nằm trong repo KB trung tâm,
+  tại `projects/<tên>/.kb-local/adr/`). ADR cấp KB chung để ở đây.

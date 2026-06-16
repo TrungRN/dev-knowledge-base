@@ -8,7 +8,7 @@ File entry chuẩn cho mọi AI agent (Claude Code, Cursor, Copilot, Codex...).
 1. **Đọc index trước, fetch sau.** Luôn đọc `llms.txt` (KB này) và `.kb/repo-map.md` (project hiện tại) TRƯỚC. Chỉ mở file chi tiết khi thực sự cần. Không nạp cả KB hay cả codebase vào context.
 2. **Cross-project qua registry.** Cần thông tin từ project anh em? Tra `registry.yaml` để biết đường dẫn/entry, rồi đọc `.kb` của project đó — đừng đoán.
 3. **Repo là nguồn sự thật.** Knowledge ở repo thắng mọi nguồn khác. Nếu code và doc mâu thuẫn, tin code và báo drift.
-4. **Sửa code thì sửa knowledge trong cùng PR.** Module mới, đổi luồng, đổi quyết định kiến trúc → cập nhật `.kb` (repo map, ADR) ngay trong PR đó. Xem `templates/kb-acceptance-checklist.md`.
+4. **Sửa code thì sửa knowledge liên quan.** Module mới, đổi luồng, đổi quyết định kiến trúc → cập nhật `.kb-local/` (repo map, ADR). Knowledge riêng project giờ nằm trong repo KB trung tâm (`projects/<tên>/.kb-local/`), nên PR sửa knowledge thường là PR riêng của repo KB. Xem `templates/kb-acceptance-checklist.md`.
 5. **Theo chuẩn chung.** Tuân `standards/*` cho git, style, review, security, naming, indexing. Phần riêng theo stack nằm trong `.kb` của project.
 6. **Không bịa.** Không chắc thì nói không chắc và chỉ ra cần đọc file/hỏi ai.
 
@@ -36,15 +36,27 @@ Không cần người nhắc — tự thực hiện theo thứ tự:
 ## Cấu trúc tham chiếu
 
 ```
-project-legacy/
-├── AGENTS.md          # NGUỒN SỰ THẬT: @import .kb/standards/*, phần riêng project
-├── CLAUDE.md          # file trỏ: chỉ chứa "@AGENTS.md" (để Claude Code nhận)
-├── .kb -> ../dev-knowledge-base   # symlink tới KB trung tâm (một bản vật lý)
-└── .kb-local/         # knowledge RIÊNG của project: repo-map.md, llms.txt, adr/
+dev-knowledge-base/                    # KB trung tâm (một bản vật lý)
+├── AGENTS.md                          # NGUỒN SỰ THẬT: luật chung cho mọi agent
+├── llms.txt
+├── registry.yaml
+├── projects/
+│   └── project-legacy/
+│       └── .kb-local/                 # knowledge RIÊNG của project: repo-map.md, llms.txt, adr/
+│
+project-legacy/                        # repo project con
+├── CLAUDE.md                          # file trỏ: khối nhỏ → @.kb/AGENTS.md + fallback
+├── .kb -> /abs/path/dev-knowledge-base            # symlink TUYỆT ĐỐI tới KB
+├── .kb-local -> /abs/path/dev-knowledge-base/projects/project-legacy/.kb-local   # symlink TUYỆT ĐỐI
+└── .claude/commands/                  # /kb-scan, /kb-drift, /kb-onboard (copy từ KB)
 ```
 
 > Mỗi tool đọc một tên file khác nhau. AGENTS.md là nguồn duy nhất; CLAUDE.md (và
 > Copilot/Gemini nếu dùng) chỉ là file trỏ. Xem `standards/tool-compatibility.md`.
 
-> Lưu ý: `.kb` là symlink chỉ-đọc tới KB chung. Knowledge riêng của project để trong
-> `.kb-local/` (versioned cùng repo project). Đừng ghi vào `.kb`.
+> Lưu ý:
+> • `.kb` là symlink chỉ-đọc tới KB chung.
+> • `.kb-local/` là symlink tới `projects/<tên-project>/.kb-local/` trong KB trung tâm.
+>   Knowledge riêng project giờ versioned cùng repo KB, KHÔNG nằm trong repo project con.
+> • CLAUDE.md trong project con có fallback: nếu `.kb` chưa được link, agent bỏ qua mọi
+>   tham chiếu `.kb`/`.kb-local` và tiếp tục làm việc bình thường.

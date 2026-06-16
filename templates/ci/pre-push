@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # pre-push hook — KB drift check (cảnh báo sớm trên máy dev, KHÔNG chặn push).
-# Cài bằng: .kb/scripts/install-hooks.sh   (copy file này vào .git/hooks/pre-push)
+# Cài bằng: kb ci   (copy file này vào .git/hooks/pre-push)
+#
+# Lưu ý: .kb-local/ giờ là symlink trỏ về KB trung tâm
+# (projects/<tên-project>/.kb-local/). Pre-push local chạy được nhờ symlink đã link.
 #
 # Muốn CHẶN push khi có drift: đổi dòng cuối thành:
 #     exec bash "$CHECK" "origin/main" --strict

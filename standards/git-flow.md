@@ -18,7 +18,7 @@ Ví dụ: `fix(payment): retry khi gateway timeout vì lỗi 504 lúc cao tải`
 ## Pull Request
 - **Nhỏ và một mục đích.** PR > 400 dòng nên tách.
 - Mô tả PR trả lời: *Vì sao? Thay đổi gì? Rủi ro gì? Test thế nào?*
-- **Bắt buộc:** nếu PR đổi kiến trúc/luồng/module → cập nhật `.kb-local/` trong CÙNG PR (xem `templates/kb-acceptance-checklist.md`).
+- **Bắt buộc:** nếu PR đổi kiến trúc/luồng/module → cập nhật `.kb-local/` trong repo KB trung tâm (`projects/<tên>/.kb-local/`). Thường là PR riêng của repo KB; đính kèm liên kết trong PR code (xem `templates/kb-acceptance-checklist.md`).
 - Chạy `prompts/review-kb-drift.md` trước khi xin review.
 
 ## Điều agent phải làm

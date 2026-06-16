@@ -2,31 +2,33 @@
 # Agent tra file này để biết project khác có gì & ở đâu, KHÔNG load cả project.
 # Schema thiết kế MCP-ready: giai đoạn 2 có thể bọc dev-knowledge-base thành MCP server
 # đọc đúng file này và serve thành tool, không đổi data model.
+#
+# Lưu ý: knowledge riêng project (.kb-local) giờ nằm trong KB trung tâm,
+# tại projects/<id>/.kb-local/. Project con truy xuất qua symlink .kb-local.
+# Đây là template — thay <PROJECT-ID>, <TÊN>, <PATH> bằng project thật khi dùng.
 
-version: 1
-updated: 2026-06-14
+version: 2
+updated: 2026-06-15
 
-# Mỗi project con đăng ký một entry. Chạy scripts/connect-project.sh sẽ thêm tự động.
 projects:
-  - id: example-legacy-api          # định danh ngắn, duy nhất
-    name: "Legacy Payment API"       # tên người-đọc
-    path: "../example-legacy-api"    # đường dẫn tương đối từ dev-knowledge-base (cùng cấp)
-    status: active                   # active | maintenance | archived
-    stack:                           # do auto-scan điền
-      languages: [java]
-      frameworks: [spring-boot]
-      package_manager: maven
-    entrypoints:                     # điểm vào quan trọng nhất để hiểu project
-      - "src/main/java/.../Application.java"
+  - id: <PROJECT-ID>                   # định danh ngắn, duy nhất
+    name: "<TÊN PROJECT>"              # tên người-đọc
+    path: "../<project-dir>"          # đường dẫn tương đối từ dev-knowledge-base (cùng cấp)
+    status: active                     # active | maintenance | archived
+    stack:                             # do auto-scan điền
+      languages: []
+      frameworks: []
+      package_manager: ""
+    entrypoints: []                   # điểm vào quan trọng nhất để hiểu project
     kb:
-      agents: "AGENTS.md"            # nguồn luật: CLAUDE.md + .kb/AGENTS.md (KB chung)
-      repo_map: ".kb-local/repo-map.md"
-      llms: ".kb-local/llms.txt"
+      agents: "AGENTS.md"                                      # nguồn luật chung trong KB
+      repo_map: "projects/<PROJECT-ID>/.kb-local/repo-map.md"   # knowledge riêng project (trong KB)
+      llms: "projects/<PROJECT-ID>/.kb-local/llms.txt"        # index riêng project (trong KB)
     docs:
-      confluence_space: ""           # để trống nếu chưa dùng (giai đoạn 2)
-      repo_url: ""
-    owners: ["trungrn67@gmail.com"]
-    last_scanned: ""                 # auto-scan cập nhật
-    notes: "Đây là entry mẫu — xoá khi nối project thật."
+      confluence_space: ""            # để trống nếu chưa dùng (giai đoạn 2)
+      repo_url: ""                    # URL repo project con
+    owners: []
+    last_scanned: ""                  # auto-scan cập nhật
+    notes: ""
 
-# Hết. Thêm project mới bằng cách copy block trên hoặc chạy connect-project.sh.
+# Hết. Thêm project mới bằng cách copy block trên hoặc chạy kb link <path>.

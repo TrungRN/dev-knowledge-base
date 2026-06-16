@@ -1,8 +1,9 @@
 # Điều kiện cần thoả khi cập nhật knowledge
 
 Checklist này là "hợp đồng" giữa code và knowledge. Một PR đụng tới các mục dưới đây
-**chỉ được merge khi** knowledge tương ứng đã cập nhật trong cùng PR. Dùng kèm
-`prompts/review-kb-drift.md`.
+**chỉ được merge khi** knowledge tương ứng đã cập nhật. Knowledge nằm trong repo KB trung tâm
+tại `projects/<tên>/.kb-local/` (thường là PR riêng của repo KB, đính kèm liên kết trong PR code).
+Dùng kèm `prompts/review-kb-drift.md`.
 
 ## Khi thêm/xoá/đổi tên module hoặc file then chốt
 - [ ] `.kb-local/repo-map.md` cập nhật cây thư mục & danh sách module.

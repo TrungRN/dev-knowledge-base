@@ -2,10 +2,14 @@
 
 Một vòng từ lúc nhận task tới lúc merge. Mỗi bước trỏ tới file liên quan trong KB.
 
+Lưu ý mới: `.kb-local/` giờ là symlink trỏ về `projects/<tên>/.kb-local/` trong
+KB trung tâm. Knowledge riêng project versioned cùng repo KB, không còn trong repo
+project con.
+
 ## Sơ đồ nhanh
 ```
 nhánh mới → (agent đọc index) → code → cập nhật knowledge → check drift
-   → commit → push → mở PR → review → merge
+   → commit (code + KB) → push → mở PR → review → merge
 ```
 
 ## Chi tiết
@@ -25,13 +29,17 @@ Theo `standards/code-style.md`, `naming.md`, `security.md`. Phần riêng theo s
 
 **4. Cập nhật knowledge NẾU có ảnh hưởng**
 Đụng module / public API / luồng / lệnh / quyết định kiến trúc → sửa `.kb-local/`
-(repo-map, ADR...) ngay trong nhánh này. Điều kiện cụ thể: `templates/kb-acceptance-checklist.md`.
+(repo-map, ADR...) trong repo KB trung tâm. Điều kiện cụ thể: `templates/kb-acceptance-checklist.md`.
+
+Thường sẽ có 2 PR liên quan:
+- PR 1: code trong repo project con.
+- PR 2: knowledge trong repo KB trung tâm (`projects/<tên>/.kb-local/`).
 
 **5. Tự kiểm trước khi commit**
 - Chạy test + lint/format của project.
 - Chạy drift check (script độc lập, không cần cài gì):
   ```bash
-  .kb/scripts/kb-drift-check.sh
+  kb check
   ```
   Vá knowledge nếu nó cảnh báo. Muốn phân tích sâu hơn: dùng prompt
   `prompts/review-kb-drift.md`. (Tự động theo hook/CI là tùy chọn — xem
@@ -51,10 +59,11 @@ git push -u origin feature/<mô-tả-ngắn>
 
 **8. Mở PR vào `main`**
 Mô tả PR trả lời: *Vì sao? Thay đổi gì? Rủi ro? Test thế nào?* PR nhỏ, một mục đích.
+Nếu PR code đi kèm PR knowledge, đính kèm liên kết tới PR của repo KB.
 
 **9. Review PR**
 Người review (hoặc agent) dùng `standards/code-review.md` — checklist có mục
-**Knowledge bắt buộc** đảm bảo `.kb-local/` đã cập nhật cùng PR.
+**Knowledge bắt buộc** đảm bảo `.kb-local/` trong KB trung tâm đã được cập nhật tương ứng.
 
 **10. Merge**
 Khi xanh CI + được duyệt + không còn drift → merge vào `main`.

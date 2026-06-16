@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # install-hooks.sh — cài drift check vào một project:
-#   1) vendor script + config CI vào .kb-local/ci/ (commit thư mục này)
-#   2) cài pre-push hook (cảnh báo sớm)
+#   1) đặt script + config CI vào .kb-local/ci/ (bây giờ nằm trong KB trung tâm
+#      qua symlink .kb-local; commit ở repo KB)
+#   2) cài pre-push hook (cảnh báo sớm) trong .git/hooks của project con
 #   3) in hướng dẫn bật CI
 #
 # Dùng: ./scripts/install-hooks.sh [đường-dẫn-project]   (mặc định: thư mục hiện tại)
@@ -10,14 +11,25 @@ KB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET="${1:-$PWD}"
 PROOT="$(cd "$TARGET" && (git rev-parse --show-toplevel 2>/dev/null || pwd))"
 cd "$PROOT"
+BASE="$(basename "$PROOT")"
 
-# 1) Vendor (để CI runner dùng được — symlink .kb không tồn tại trên CI)
-mkdir -p .kb-local/ci
-cp "$KB_DIR/scripts/kb-drift-check.sh"             .kb-local/ci/kb-drift-check.sh
-cp "$KB_DIR/templates/ci/gitlab-ci.kb-drift.yml"   .kb-local/ci/gitlab-ci.kb-drift.yml
-cp "$KB_DIR/templates/ci/github-kb-drift.yml"      .kb-local/ci/github-kb-drift.yml
-chmod +x .kb-local/ci/kb-drift-check.sh
-echo "• Vendored: .kb-local/ci/  (NHỚ commit thư mục này)"
+# Xác định .kb-local thực tế (trong KB trung tâm)
+KB_LOCAL_REAL="$KB_DIR/projects/$BASE/.kb-local"
+if [ -L .kb-local ]; then
+  KB_LOCAL_REAL="$(readlink .kb-local)"
+elif [ ! -d "$KB_LOCAL_REAL" ]; then
+  mkdir -p "$KB_LOCAL_REAL"
+  ln -s "$KB_LOCAL_REAL" .kb-local 2>/dev/null || true
+fi
+mkdir -p "$KB_LOCAL_REAL/ci"
+
+# 1) Đặt CI script/template vào KB trung tâm
+cp "$KB_DIR/scripts/kb-drift-check.sh"             "$KB_LOCAL_REAL/ci/kb-drift-check.sh"
+cp "$KB_DIR/templates/ci/gitlab-ci.kb-drift.yml"  "$KB_LOCAL_REAL/ci/gitlab-ci.kb-drift.yml"
+cp "$KB_DIR/templates/ci/github-kb-drift.yml"     "$KB_LOCAL_REAL/ci/github-kb-drift.yml"
+chmod +x "$KB_LOCAL_REAL/ci/kb-drift-check.sh"
+echo "• CI artifacts đặt trong KB trung tâm: projects/$BASE/.kb-local/ci/"
+echo "  (commit thư mục này trong repo dev-knowledge-base; project con truy xuất qua symlink)"
 
 # 2) pre-push hook (không ghi đè nếu đã có hook khác)
 HOOK=".git/hooks/pre-push"
@@ -35,11 +47,15 @@ fi
 cat <<EOF
 
 Bước cuối — bật CI (chọn theo nền tảng):
-  • GitLab: thêm vào .gitlab-ci.yml của project:
-        include:
-          - local: '.kb-local/ci/gitlab-ci.kb-drift.yml'
-  • GitHub: copy .kb-local/ci/github-kb-drift.yml -> .github/workflows/kb-drift.yml
+  • GitLab: CI runner cần checkout kèm repo dev-knowledge-base ở ngang hàng project,
+            hoặc dùng remote include. File tham khảo:
+            projects/$BASE/.kb-local/ci/gitlab-ci.kb-drift.yml
+  • GitHub: copy projects/$BASE/.kb-local/ci/github-kb-drift.yml
+            -> .github/workflows/kb-drift.yml trong project.
+            Workflow cần thêm bước checkout dev-knowledge-base ở ngang hàng project.
 
 Chế độ mặc định: CẢNH BÁO (không chặn merge).
-Muốn CHẶN: GitLab đặt allow_failure:false; thêm '--strict' vào lệnh chạy script.
+Muốn CHẶN: thêm '--strict' vào lệnh chạy script và đặt allow_failure:false / branch protection.
+
+Lưu ý: pre-push hook local vẫn chạy được vì dev đã link KB (symlink .kb-local có hiệu lực).
 EOF

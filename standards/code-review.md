@@ -23,7 +23,8 @@ Dùng khi review PR (người hoặc agent). Đánh dấu mục không áp dụn
 - [ ] Path lỗi cũng được test, không chỉ happy path.
 
 ## Knowledge (BẮT BUỘC — đặc thù KB này)
-- [ ] Nếu đổi kiến trúc/luồng/module/quyết định → `.kb-local/` đã cập nhật trong CÙNG PR.
+- [ ] Nếu đổi kiến trúc/luồng/module/quyết định → `.kb-local/` đã cập nhật trong repo KB trung tâm
+      (`projects/<tên>/.kb-local/`; thường là PR riêng của repo KB).
 - [ ] `repo-map.md` còn khớp với cấu trúc thật sau thay đổi.
 - [ ] Quyết định kiến trúc mới có ADR (nếu thuộc loại cần ADR).
 - [ ] Đã chạy `prompts/review-kb-drift.md`, không còn drift chưa xử lý.

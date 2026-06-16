@@ -4,11 +4,14 @@
 project chưa có KB**. Agent sẽ tự phát hiện stack và sinh knowledge từ template.
 Stack-agnostic: không giả định ngôn ngữ trước.
 
+Lưu ý: `.kb-local/` trong project con là symlink trỏ về `projects/<tên-project>/.kb-local/`
+trong repo KB trung tâm. Toàn bộ knowledge project được ghi ở đó.
+
 ---
 
 **Vai trò:** Bạn là kỹ sư đang lập bản đồ một codebase legacy để vừa cho người mới
 onboard, vừa cho AI agent đọc hiệu quả (tiết kiệm token). Làm theo các bước, KHÔNG
-sửa code nguồn — chỉ tạo file trong `.kb-local/`.
+sửa code nguồn — chỉ tạo file trong `.kb-local/` (thực chất nằm trong KB trung tâm).
 
 ### Bước 1 — Phát hiện stack (tất định, qua manifest)
 Quét gốc & thư mục con tìm các dấu hiệu, suy ra ngôn ngữ/framework/package manager/lệnh:
@@ -29,9 +32,10 @@ Tạo `.kb-local/repo-map.md` từ `.kb/templates/repo-map.md`:
 - Luồng nghiệp vụ chính: lần theo từ entry point, mô tả 3–7 bước, trỏ file.
 - Phần mong manh / nợ kỹ thuật / lib lỗi thời phát hiện được.
 
-### Bước 3 — Sinh knowledge vào `.kb-local/` (KHÔNG đụng file ở gốc)
-Tất cả nội dung project nằm trong `.kb-local/`. File `CLAUDE.md` ở gốc do `link-kb.sh`
-tạo sẵn (chỉ trỏ `@.kb/AGENTS.md`) — đừng dán nội dung vào đó.
+### Bước 3 — Sinh knowledge vào `.kb-local/` (KHÔNG đụng file ở gốc project)
+Tất cả nội dung project nằm trong `.kb-local/` (symlink tới KB trung tâm). File `CLAUDE.md`
+ở gốc project do `link-kb.sh` tạo sẵn (chỉ trỏ `@.kb/AGENTS.md` + fallback) — đừng dán
+nội dung vào đó.
 - `.kb-local/repo-map.md` (đã tạo ở Bước 2) — điền đầy đủ: **stack, lệnh build/run/test, gotchas** ở đầu file, rồi cây thư mục, module, entry, luồng.
 - `.kb-local/llms.txt` — cập nhật mục lục tài liệu của project.
 - `.kb-local/code-style.md`: formatter/linter & quy ước đọc được từ code thật.
@@ -40,13 +44,14 @@ tạo sẵn (chỉ trỏ `@.kb/AGENTS.md`) — đừng dán nội dung vào đó
 
 ### Bước 4 — Đăng ký vào registry
 Thêm/cập nhật entry của project trong `.kb/registry.yaml`: id, name, path, stack,
-entrypoints, đường dẫn kb, `last_scanned` = hôm nay.
+entrypoints, đường dẫn kb (dùng `projects/<tên>/.kb-local/...`), `last_scanned` = hôm nay.
 
 ### Bước 5 — Báo cáo
 Tóm tắt: stack phát hiện, số module, các luồng chính, **danh sách "cần xác nhận"**
 và **câu hỏi cho con người** (chỗ code mơ hồ không suy ra được). Đừng bịa khi không chắc.
 
 ### Ràng buộc
-- Không sửa code nguồn. Chỉ tạo/sửa: `.kb-local/` và `.kb/registry.yaml`. (Đừng đụng `CLAUDE.md` ở gốc — link-kb đã lo.)
+- Không sửa code nguồn. Chỉ tạo/sửa: `.kb-local/` (trong KB trung tâm) và `.kb/registry.yaml`.
+  (Đừng đụng `CLAUDE.md` ở gốc project — link-kb đã lo.)
 - Index dạng text, signature không kèm thân hàm (xem `.kb/standards/indexing.md`).
 - Ngắn gọn, trỏ-đừng-nhúng. Mục tiêu là bản đồ tra cứu, không phải bản sao codebase.

@@ -2,7 +2,8 @@
 
 Đây là nguyên tắc chung áp dụng cho mọi project. **Quy ước cụ thể theo ngôn ngữ/
 framework** (vd indent, linter config, format) do auto-scan phát hiện và ghi vào
-`.kb-local/code-style.md` của từng project — tin file đó trước khi file này.
+`.kb-local/code-style.md` của từng project (trong repo KB trung tâm, tại
+`projects/<tên>/.kb-local/code-style.md`) — tin file đó trước khi file này.
 
 ## Nguyên tắc chung
 - **Theo formatter/linter sẵn có của project**, đừng áp style cá nhân. Nếu project có `.editorconfig`, `prettier`, `eslint`, `checkstyle`, `ruff`, `gofmt`... thì đó là luật.
